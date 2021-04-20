@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password:"Dolphin874!",
-    database: "employees_db"
+    database: "employees"
 });
 
 connection.connect(function (err) {
@@ -15,7 +15,7 @@ connection.connect(function (err) {
       console.error("error connecting: " + err.stack);
       return;
     }
-    console.log("connected as id " + connection.threadId);
+    // console.log("connected as id " + connection.threadId);
   });
 
 // Setting up connection.query to use promies instead of callbacks
