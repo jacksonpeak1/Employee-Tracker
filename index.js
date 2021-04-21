@@ -124,7 +124,7 @@ async function updateEmployeeRole1() {
       type: "input",
       name: "id",
       message: "What employee do we wanna update?",
-      choices: employeeChoices
+      choices: employeeChoices,
     }
   ]);
 

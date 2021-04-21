@@ -37,9 +37,12 @@ class DB {
   }
 
   updateEmployeeRole2(Eid, Rid) {
-    return this.connection.query(`
+    return this.connection.query(
+      `
     UPDATE employee SET role_id = ${Rid} WHERE id = ${Eid}
-    `, newEmployee);
+    `,
+      newEmployee
+    );
   }
 }
 
