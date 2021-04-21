@@ -10,7 +10,7 @@ function startMainPrompt() {
       name: "start",
       type: "list",
       message: "Which would you like to pick?",
-      choices: ["View all employees", "Add an employee"],
+      choices: ["View all employees", "Add an employee","View all departments",  "View all Roles", "Update Employee Role"],
     })
     .then((answers) => {
       // Use user feedback for... whatever!!
@@ -18,6 +18,14 @@ function startMainPrompt() {
         viewAllEmployees1();
       } else if (answers.start === "Add an employee") {
         addAnEmployee1();
+      } else if (answers.start === "View all departments") {
+        viewAllDepartment1();
+      }
+      else if (answers.start === "View all Roles") {
+        viewAllRoles1();
+      }
+      else if (answers.start === "Update Employee Role") {
+        updateEmployeeRole1();
       }
     });
 }
@@ -26,6 +34,20 @@ async function viewAllEmployees1() {
   const allEmployees = await db.viewAllEmployees2();
   console.log("\n");
   console.table(allEmployees);
+  startMainPrompt();
+}
+
+async function viewAllDepartment1() {
+  const allDepartment = await db.viewAllDepartment2();
+  console.log("\n");
+  console.table(allDepartment);
+  startMainPrompt();
+}
+
+async function viewAllRoles1() {
+  const allRoles = await db.viewAllRoles2();
+  console.log("\n");
+  console.table(allRoles);
   startMainPrompt();
 }
 
@@ -49,7 +71,7 @@ async function addAnEmployee1() {
     },
   ]);
 
-  //ask for role
+  //ask for role - generates array of objects
   const roleChoices = roles.map((role) => ({
     name: role.title,
     value: role.id,
@@ -82,6 +104,47 @@ async function addAnEmployee1() {
 
   // console.log(newEmployee);
   await db.createEmployee2(newEmployee);
-  console.log("success")
+  console.log("success");
   startMainPrompt();
 }
+
+async function updateEmployeeRole1() {
+
+  const allRoles = await db.viewAllRoles2();
+  const allEmployees = await db.viewAllEmployees2();
+  
+  const employeeChoices = allEmployees.map((employee) => ({
+    name: employee.title,
+    value: employee.id,
+  }));
+
+  //create newEmployee object
+  const newEmployee = await inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What employee do we wanna update?",
+      choices: employeeChoices
+    }
+  ]);
+
+  //ask for role - generates array of objects
+  const roleChoices = allRoles.map((role) => ({
+    name: role.title,
+    value: role.id,
+  }));
+
+  const newEmployeeRoleId = await inquirer.prompt({
+    type: "list",
+    name: "id",
+    message: "What is the employee's role?",
+    choices: roleChoices,
+  });
+
+  // console.log(newEmployee);
+  await db.updateEmployeeRole2(newEmployee.id,newEmployeeRoleId.id);
+  console.log("success");
+  startMainPrompt();
+}
+
+
